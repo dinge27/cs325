@@ -1,5 +1,3 @@
-import numpy as np
-
 '''
 This file contains the template for Assignment1. For testing it, I will place
 it
@@ -10,21 +8,21 @@ the name
 of the file or the name/signature of the following function.
 Also, I will use <python3> to run this code.
 '''
-def partition(days, clubs, actual_min, m):
-    n = len(clubs)
+def feasible(max, clubs, days):
+    members = 0
+    days_used = 1 
 
-    if days == 1:
-        sum = np.sum(clubs)
-        return max(sum, m)
+    for club in clubs:
+        if members + club <= max:
+            members += club
+        else:
+            days_used += 1
+            members = club
 
-    for i in range(n - days + 1):
-        sum = np.sum(clubs[0:i+1])
-        p = partition(days-1, clubs[i+1:], actual_min, max(sum, m))
-
-        actual_min = min(p, actual_min)
-
+            if days_used > days:
+                return False
     
-    return actual_min
+    return True
 
 def min_num_attendees(input_file_path, output_file_path):
     with open(input_file_path, 'r') as input_file:
@@ -32,19 +30,21 @@ def min_num_attendees(input_file_path, output_file_path):
         line = input_file.readline().split(",")
         clubs = [int(num) for num in line]
 
-    n = len(clubs)
-    print(days)
-    print(n)
-    if (days >= n):
-        return max(clubs)
+    left = max(clubs) 
+    right = sum(clubs)
     
-    ans = partition(days, clubs, np.sum(clubs), 0)
-    
-    with open(output_file_path, 'w') as output_file:
-        output_file.write(str(ans))
+    while left < right:
+        mid = (left + right) // 2 
 
-#def min_num_attendees(input_file_path, output_file_path):
-    
+        if feasible(mid, clubs, days):
+            right = mid
+        else:
+            left = mid + 1 
+
+
+    with open(output_file_path, 'w') as output_file:
+        output_file.write(str(left))
+
 '''
 This function will contain your code. It wil read from the file
 <input_file_path>,
@@ -58,4 +58,4 @@ files paths that you want to read from/write to. Do NOT forget to comment it
 out before
 submitting.
 '''
-min_num_attendees('test_cases\input6.txt', 'output')
+#min_num_attendees('test_cases\input6.txt', 'output')
