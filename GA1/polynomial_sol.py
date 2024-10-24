@@ -1,4 +1,4 @@
-def feasible(max, clubs, days):
+def viable(max, clubs, days):
     members = 0
     days_used = 1 
 
@@ -27,8 +27,8 @@ def calculate_min(clubs, days):
         curr_sum = clubs[i]
 
         j = i + 1
-        while i + j < n:
-            curr_sum += clubs[i + j]
+        for j in range(i+1, n):
+            curr_sum += clubs[j]
 
             if (curr_sum > curr_min):
                 break
@@ -53,4 +53,4 @@ def min_num_attendees(input_file_path, output_file_path):
     with open(output_file_path, 'w') as output_file:
         output_file.write(str(ans))
 
-min_num_attendees('test_cases\input6.txt', 'output')
+min_num_attendees('test_cases\input3.txt', 'output')

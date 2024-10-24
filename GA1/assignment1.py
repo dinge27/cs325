@@ -41,7 +41,6 @@ def min_num_attendees(input_file_path, output_file_path):
         else:
             left = mid + 1 
 
-
     with open(output_file_path, 'w') as output_file:
         output_file.write(str(left))
 
@@ -58,4 +57,4 @@ files paths that you want to read from/write to. Do NOT forget to comment it
 out before
 submitting.
 '''
-#min_num_attendees('test_cases\input6.txt', 'output')
+#min_num_attendees('test_cases\input5.txt', 'output')
