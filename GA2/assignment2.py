@@ -19,12 +19,12 @@ def min_attendance(clubs, n, sum1, sum2, total_sum, array, memo):
         array.append(max_val)
         memo[n][sum1][sum2] = max_val
         return
-    
-    min_attendance(clubs, n-1, sum1, sum2, total_sum, array, memo)
 
     min_attendance(clubs, n-1, sum1 + clubs[n-1], sum2, total_sum, array, memo)
 
     min_attendance(clubs, n-1, sum1, sum2 + clubs[n-1], total_sum, array, memo)
+
+    min_attendance(clubs, n-1, sum1, sum2, total_sum, array, memo)
 
     memo[n][sum1][sum2] = 1
 
@@ -43,8 +43,6 @@ def min_attendance_for_long_weekend(input_file_path, output_file_path):
 
     answer = min(array)
 
-    print(answer)
-
     with open(output_file_path, 'w') as output_file:
         output_file.write(str(answer))
 '''
@@ -61,6 +59,6 @@ out before
 submitting.
 '''
 
-min_attendance_for_long_weekend('sample_tests_ga2/tests/input6.txt', 'output')
+min_attendance_for_long_weekend('sample_tests_ga2/tests/input4.txt', 'output')
 
 
