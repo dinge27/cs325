@@ -9,37 +9,24 @@ of the file or the name/signature of the following function.
 Also, I will use <python3> to run this code.
 '''
 
-def find_max(clubs_left, n, sum1, sum2, total_sum, array, memo):
+def min_attendance(clubs, n, sum1, sum2, total_sum, array, memo):
 
-    if memo[n][sum1][sum2] != -1:
-        return memo[n][sum1][sum2]
+    if (memo[n][sum1][sum2] != -1):
+        return
 
     if n == 0:
         max_val = (max(sum1, sum2, total_sum - sum1 - sum2))
         array.append(max_val)
         memo[n][sum1][sum2] = max_val
-        return max_val
-    
-    find_max(clubs_left, n-1, sum1, sum2, total_sum, array, memo)
-
-    find_max(clubs_left, n-1, sum1, sum2 + clubs_left[n-1], total_sum, array, memo)
-
-
-def min_attendance(clubs, n, clubs_left, curr_sum, total_sum, array, memo1, memo2):
-
-    if (memo1[n][curr_sum] != -1):
-        return
-
-    find_max(clubs_left, len(clubs_left), curr_sum, 0, total_sum, array, memo2)
-
-    if n == 0:
         return
     
-    min_attendance(clubs, n-1, clubs_left, curr_sum + clubs[n-1], total_sum, array, memo1, memo2)
-    
-    min_attendance(clubs, n-1, clubs_left + [clubs[n-1]], curr_sum, total_sum, array, memo1, memo2)
+    min_attendance(clubs, n-1, sum1, sum2, total_sum, array, memo)
 
-    memo1[n][curr_sum] = min(array)
+    min_attendance(clubs, n-1, sum1 + clubs[n-1], sum2, total_sum, array, memo)
+
+    min_attendance(clubs, n-1, sum1, sum2 + clubs[n-1], total_sum, array, memo)
+
+    memo[n][sum1][sum2] = 1
 
 def min_attendance_for_long_weekend(input_file_path, output_file_path):
     with open(input_file_path, 'r') as input_file:
@@ -50,10 +37,9 @@ def min_attendance_for_long_weekend(input_file_path, output_file_path):
     total_sum = sum(clubs)
 
     array = []
-    memo1 = [[-1 for _ in range(total_sum + 1)] for _ in range(n + 1)]
-    memo2 = [[[-1 for _ in range(total_sum + 1)] for _ in range(total_sum + 1)] for _ in range(n + 1)]
+    memo = [[[-1 for _ in range(total_sum + 1)] for _ in range(total_sum + 1)] for _ in range(n + 1)]
 
-    min_attendance(clubs, n, [], 0, sum(clubs), array, memo1, memo2)
+    min_attendance(clubs, n, 0, 0, total_sum, array, memo)
 
     answer = min(array)
 
@@ -75,6 +61,6 @@ out before
 submitting.
 '''
 
-min_attendance_for_long_weekend('sample_tests_ga2/tests/input1.txt', 'output')
+min_attendance_for_long_weekend('sample_tests_ga2/tests/input6.txt', 'output')
 
 
