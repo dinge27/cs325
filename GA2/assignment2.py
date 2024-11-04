@@ -11,13 +11,13 @@ Also, I will use <python3> to run this code.
 
 def min_attendance(clubs, n, sum1, sum2, total_sum, array, memo):
 
-    if (memo[n][sum1][sum2] != -1):
+    if (memo[sum1][sum2] != -1):
         return
 
     if n == 0:
         max_val = (max(sum1, sum2, total_sum - sum1 - sum2))
         array.append(max_val)
-        memo[n][sum1][sum2] = max_val
+        memo[sum1][sum2] = max_val
         return
 
     min_attendance(clubs, n-1, sum1 + clubs[n-1], sum2, total_sum, array, memo)
@@ -25,8 +25,6 @@ def min_attendance(clubs, n, sum1, sum2, total_sum, array, memo):
     min_attendance(clubs, n-1, sum1, sum2 + clubs[n-1], total_sum, array, memo)
 
     min_attendance(clubs, n-1, sum1, sum2, total_sum, array, memo)
-
-    memo[n][sum1][sum2] = 1
 
 def min_attendance_for_long_weekend(input_file_path, output_file_path):
     with open(input_file_path, 'r') as input_file:
@@ -37,7 +35,7 @@ def min_attendance_for_long_weekend(input_file_path, output_file_path):
     total_sum = sum(clubs)
 
     array = []
-    memo = [[[-1 for _ in range(total_sum + 1)] for _ in range(total_sum + 1)] for _ in range(n + 1)]
+    memo = [[-1 for _ in range(total_sum + 1)] for _ in range(total_sum + 1)]
 
     min_attendance(clubs, n, 0, 0, total_sum, array, memo)
 
@@ -59,6 +57,6 @@ out before
 submitting.
 '''
 
-min_attendance_for_long_weekend('sample_tests_ga2/tests/input4.txt', 'output')
+#min_attendance_for_long_weekend('sample_tests_ga2/tests/input3.txt', 'output')
 
 
