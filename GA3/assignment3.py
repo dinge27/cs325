@@ -19,6 +19,9 @@ class UnionFind:
     def union(self, i, j):
         i_root = self.find(i)
         j_root = self.find(j)
+        
+        if i_root == j_root:
+            return False
 
         if self.rank[i_root] > self.rank[j_root]:
             self.parent[j_root] = i
@@ -27,31 +30,60 @@ class UnionFind:
         else:
             self.parent[j_root] = i_root
             self.rank[i_root] += 1
-        
-def base_min_spanning_tree(edges, num_vertices, min_spanning_tree, uf):
-    index_of_last_edge_added = 0
 
-    for n in range(num_vertices-2):
-        # check = check_cycle(adj_list, edge.node)
-        # print(adj_list)
+        return True
         
-        i = uf.find(edges[n].node)
-        j = uf.find(edges[n].neighbor)
-        if i != j:
-            min_spanning_tree.append(edges[n])
-            index_of_last_edge_added = n
-            uf.union(i, j)
+def kruskal(edges, num_vertices, min_spanning_tree):
+    # Sorts the edges
+    edges = sorted(edges, key=lambda edge: edge.weight) 
+
+    uf = UnionFind(num_vertices)
+
+    sum = 0
+    for edge in edges:
+        if uf.union(edge.node, edge.neighbor):
+            min_spanning_tree.append(edge)
+            sum += edge.weight
     
-    return index_of_last_edge_added
+    return sum
 
-def find_min_spanning_tree(edges, index, uf):
-    while index < len(edges):
-        i = uf.find(edges[index].node)
-        j = uf.find(edges[index].neighbor)
-        if i != j:
-            return index
-        else:
-            index += 1 
+def second_min_spanning_trees(edges, num_vertices, min_spanning_tree):
+    smallest_sum = float('inf')
+
+    for edge_remove in min_spanning_tree:
+        uf = UnionFind(num_vertices)
+        sum = 0
+        
+        for edge in edges:
+            if edge == edge_remove:
+                continue
+
+            if uf.union(edge.node, edge.neighbor):
+                sum += edge.weight
+
+        if sum < smallest_sum:
+            smallest_sum = sum
+            
+    
+    return sum
+
+def third_min_spanning_trees(edges, num_vertices, min_spanning_tree):
+    smallest_sum = float('inf')
+
+    for edge_remove in min_spanning_tree:
+        uf = UnionFind(num_vertices)
+        sum = 0
+        
+        for edge in edges:
+            if edge == edge_remove:
+                continue
+
+            if uf.union(edge.node, edge.neighbor):
+                sum += edge.weight
+
+        smallest_sum = min(smallest_sum, sum)
+    
+    return sum
 
 def three_min_spanning_trees(input_file_path, output_file_path):
     with open(input_file_path, 'r') as input_file:
@@ -70,23 +102,17 @@ def three_min_spanning_trees(input_file_path, output_file_path):
         for j in range(i+1, num_vertices):         
             if adj_matrix[i][j] != 0:
                 edges.append(Edge(i, j, adj_matrix[i][j]))
-    
-    # Sorts the edges
-    edges = sorted(edges, key=lambda edge: edge.weight)
 
     min_spanning_tree = []
-    uf = UnionFind(num_vertices)
 
-    for node in range(num_vertices):
-        uf.parent.append(node)
-        uf.rank.append(0)
-    index = base_min_spanning_tree(edges, num_vertices, min_spanning_tree, uf)
+    sum1 = kruskal(edges, num_vertices, min_spanning_tree)
 
-    sum = 0
     for edge in min_spanning_tree:
-        sum += edge.weight
+        print(edge.weight)
 
-    print(sum)
+    sum2 = find_min_spanning_trees(edges, num_vertices, min_spanning_tree)
+
+    print(sum1, sum2)
     
     # with open(output_file_path, 'w') as output_file:
     #     output_file.write(str())
