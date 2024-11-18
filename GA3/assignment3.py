@@ -34,9 +34,6 @@ class UnionFind:
         return True
         
 def kruskal(edges, num_vertices, min_spanning_tree):
-    # Sorts the edges
-    edges = sorted(edges, key=lambda edge: edge.weight) 
-
     uf = UnionFind(num_vertices)
 
     sum = 0
@@ -47,8 +44,9 @@ def kruskal(edges, num_vertices, min_spanning_tree):
     
     return sum
 
-def second_min_spanning_trees(edges, num_vertices, min_spanning_tree):
-    smallest_sum = float('inf')
+def find_min_spanning_trees(edges, num_vertices, min_spanning_tree):
+    second_sum = float('inf')
+    third_sum = float('inf')
 
     for edge_remove in min_spanning_tree:
         uf = UnionFind(num_vertices)
@@ -61,29 +59,11 @@ def second_min_spanning_trees(edges, num_vertices, min_spanning_tree):
             if uf.union(edge.node, edge.neighbor):
                 sum += edge.weight
 
-        if sum < smallest_sum:
-            smallest_sum = sum
-            
-    
-    return sum
+        if sum <= second_sum:
+            third_sum = second_sum
+            second_sum = sum
 
-def third_min_spanning_trees(edges, num_vertices, min_spanning_tree):
-    smallest_sum = float('inf')
-
-    for edge_remove in min_spanning_tree:
-        uf = UnionFind(num_vertices)
-        sum = 0
-        
-        for edge in edges:
-            if edge == edge_remove:
-                continue
-
-            if uf.union(edge.node, edge.neighbor):
-                sum += edge.weight
-
-        smallest_sum = min(smallest_sum, sum)
-    
-    return sum
+    return second_sum, third_sum
 
 def three_min_spanning_trees(input_file_path, output_file_path):
     with open(input_file_path, 'r') as input_file:
@@ -103,20 +83,20 @@ def three_min_spanning_trees(input_file_path, output_file_path):
             if adj_matrix[i][j] != 0:
                 edges.append(Edge(i, j, adj_matrix[i][j]))
 
+    # Sorts the edges
+    edges = sorted(edges, key=lambda edge: edge.weight) 
+
     min_spanning_tree = []
 
     sum1 = kruskal(edges, num_vertices, min_spanning_tree)
 
-    for edge in min_spanning_tree:
-        print(edge.weight)
-
-    sum2 = find_min_spanning_trees(edges, num_vertices, min_spanning_tree)
-
-    print(sum1, sum2)
+    sum2, sum3 = find_min_spanning_trees(edges, num_vertices, min_spanning_tree)
+    
+    print(sum1, sum2, sum3)
     
     # with open(output_file_path, 'w') as output_file:
     #     output_file.write(str())
 
     pass
 
-three_min_spanning_trees('input1.txt', 'output')
+three_min_spanning_trees('input2.txt', 'output')
