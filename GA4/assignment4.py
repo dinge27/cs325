@@ -188,6 +188,7 @@ function.
 Also, I will use <python3> to run this code.
 '''
 
+# START OF WRITTEN CODE
 def iteration(input_file):
     # Setup for all the variables read from file
     skip_line = input_file.readline()
@@ -208,7 +209,7 @@ def iteration(input_file):
         for light in line:
             lights[int(light)-1].append(i)
     
-    # 2-SAT part
+    # Start runtime analysis here
     formula = two_cnf()
     
     #print(lights)
