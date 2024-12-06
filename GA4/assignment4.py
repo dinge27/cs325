@@ -210,6 +210,7 @@ def iteration(input_file):
     
     # 2-SAT part
     formula = two_cnf()
+    
     #print(lights)
 
     for i in range(num_lights):
@@ -234,11 +235,12 @@ def can_turn_off_lights(input_file_path, output_file_path):
         output1 = iteration(input_file)
         output2 = iteration(input_file)
 
-    print(output1)
-    print(output2)
+    # print(output1)
+    # print(output2)
 
     with open(output_file_path, 'w') as output_file:
-            output = 0
+        output_file.write(output1 + '\n')
+        output_file.write(output2)
 
 '''
 This function will contain your code. It wil read from the file
@@ -251,5 +253,5 @@ To test your function, you can uncomment the following command with the the
 input/output
 files paths that you want to read from/write to.
 '''
-can_turn_off_lights('input2.txt', 'output.txt')
+#can_turn_off_lights('input2.txt', 'output.txt')
 
